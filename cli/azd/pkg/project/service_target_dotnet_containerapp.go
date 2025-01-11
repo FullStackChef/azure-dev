@@ -153,9 +153,18 @@ func (at *dotnetContainerAppTarget) Deploy(
 	} else if serviceConfig.DotNetContainerApp.ContainerImage != "" {
 		remoteImageName = serviceConfig.DotNetContainerApp.ContainerImage
 	} else {
-		imageName := fmt.Sprintf("%s:%s",
-			at.containerHelper.DefaultImageName(serviceConfig),
-			at.containerHelper.DefaultImageTag())
+
+		containerImageTags := at.containerHelper.DefaultImageTag()
+		if serviceConfig.Config["containerImageTags"] != nil {
+			containerImageTags = serviceConfig.Config["containerImageTags"].(string)
+		}
+
+		containerRepository := at.containerHelper.DefaultImageName(serviceConfig)
+		if serviceConfig.Config["containerRepository"] != nil {
+			containerRepository = serviceConfig.Config["containerRepository"].(string)
+		}
+
+		imageName := fmt.Sprintf("%s:%s", containerRepository, containerImageTags)
 
 		portNumber, err = at.dotNetCli.PublishContainer(
 			ctx,

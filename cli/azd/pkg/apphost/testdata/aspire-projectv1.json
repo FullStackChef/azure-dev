@@ -74,6 +74,10 @@
     "api": {
       "type": "project.v1",
       "path": "../AzureContainerApps.ApiService/AzureContainerApps.ApiService.csproj",
+      "config":{
+        "containerRepository": "azure-container-apps/apiservice",
+        "containerImageTag": "v1.2.0;latest"
+      },
       "deployment": {
         "type": "azure.bicep.v0",
         "path": "api.module.bicep",
